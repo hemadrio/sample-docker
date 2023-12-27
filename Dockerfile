@@ -1,5 +1,8 @@
-# Use a base image
-FROM ubuntu:20.04
+FROM registry.access.redhat.com/ubi8/ubi-minimal:8.5
 
-# Run a shell command when the container starts
+LABEL BASE_IMAGE="registry.access.redhat.com/ubi8/ubi-minimal:8.5"
+LABEL JAVA_VERSION="11"
+
+RUN microdnf install --nodocs java-11-openjdk-headless && microdnf clean all
+
 CMD ["echo", "Hello, Docker!"]
