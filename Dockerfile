@@ -1,14 +1,14 @@
-FROM registry.access.redhat.com/ubi8/ubi-minimal:8.5
+# A basic apache server. To use either add or bind mount content under /var/www
+FROM ubuntu:12.04
 
-MAINTAINER Muhammad Edwin < edwin at redhat dot com >
+MAINTAINER Kimbro Staken version: 0.1
 
-LABEL BASE_IMAGE="registry.access.redhat.com/ubi8/ubi-minimal:8.5"
-LABEL JAVA_VERSION="11"
+RUN apt-get update && apt-get install -y apache2 && apt-get clean && rm -rf /var/lib/apt/lists/*
 
-RUN microdnf install --nodocs java-11-openjdk-headless && microdnf clean all
+ENV APACHE_RUN_USER www-data
+ENV APACHE_RUN_GROUP www-data
+ENV APACHE_LOG_DIR /var/log/apache2
 
-WORKDIR /work/
-COPY target/*.jar /work/application.jar
+EXPOSE 80
 
-EXPOSE 8080
-CMD ["java", "-jar", "application.jar"]
+CMD ["/usr/sbin/apache2", "-D", "FOREGROUND"]
